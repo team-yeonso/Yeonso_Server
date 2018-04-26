@@ -22,5 +22,5 @@ public class Celebrity {
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "info_id")
-    private Info i_id;
+    private Info info_field_id;
 }

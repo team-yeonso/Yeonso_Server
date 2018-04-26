@@ -121,7 +121,7 @@ public class UserController {
             authRepo.deleteAuthUser((String) data.get("code"));
             info.setU_id(user);
             info = infoRepo.save(info);
-            celebrity.setI_id(info);
+            celebrity.setInfo_field_id(info);
             celebrityRepo.save(celebrity);
             response.setStatus(200);
         } else {
