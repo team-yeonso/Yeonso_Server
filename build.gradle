@@ -1,0 +1,45 @@
+buildscript {
+    ext {
+        springBootVersion = '2.0.1.RELEASE'
+    }
+    repositories {
+        mavenCentral()
+    }
+    dependencies {
+        classpath("org.springframework.boot:spring-boot-gradle-plugin:${springBootVersion}")
+    }
+}
+
+apply plugin: 'java'
+apply plugin: 'eclipse'
+apply plugin: 'org.springframework.boot'
+apply plugin: 'io.spring.dependency-management'
+
+group = 'com.yenso'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = 1.8
+
+repositories {
+    mavenCentral()
+}
+
+
+dependencies {
+    compile 'com.google.code.gson:gson:2.8.2'
+    compile 'io.springfox:springfox-swagger2:2.7.0'
+    compile 'io.springfox:springfox-swagger-ui:2.7.0'
+    compile 'com.googlecode.json-simple:json-simple:1.1.1'
+    compile('javax.xml.bind:jaxb-api:2.3.0')
+    compile('org.springframework.boot:spring-boot-starter-jdbc')
+    compile('io.jsonwebtoken:jjwt:0.9.0')
+    compile('org.projectlombok:lombok:1.16.8')
+    compile('org.springframework.boot:spring-boot-devtools')
+    compile('org.springframework.boot:spring-boot-starter-data-jpa')
+    compile('org.springframework.boot:spring-boot-starter-web')
+    testCompile group: 'org.springframework.boot', name: 'spring-boot-starter-test', version:'1.5.10.RELEASE'
+    testCompile group: 'org.assertj', name: 'assertj-core', version: '3.9.0'
+    compile files('libs/org-apache-commons-codec.jar')
+    compile group: 'org.springframework.boot', name: 'spring-boot-starter-ws', version: '1.4.7.RELEASE'
+    runtime('mysql:mysql-connector-java')
+    testCompile('org.springframework.restdocs:spring-restdocs-mockmvc')
+}
