@@ -20,6 +20,9 @@ public class Celebrity {
     @Column
     private String celebrity;
 
+    @Column
+    private String img_path;
+
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "info_id")
     private Info info_field_id;

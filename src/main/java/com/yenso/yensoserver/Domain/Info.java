@@ -1,6 +1,5 @@
 package com.yenso.yensoserver.Domain;
 
-import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;

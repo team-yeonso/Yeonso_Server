@@ -9,7 +9,7 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Entity
-public class Zddress implements Serializable{
+public class Address implements Serializable{
 
     @Id
     @OneToOne
@@ -20,7 +20,7 @@ public class Zddress implements Serializable{
     private String state;
 
     @Column
-    private String group;
+    private String state_group;
 
     @Column
     private String road;
