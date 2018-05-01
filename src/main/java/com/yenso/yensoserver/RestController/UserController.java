@@ -132,7 +132,7 @@ public class UserController {
     @RequestMapping(value = "/image", method = RequestMethod.POST)
     @ApiOperation(value = "이미지 업로드")
     public void uploadFile(@ApiParam(name = "file", value = "file", required = true) @RequestPart(required = true) MultipartFile file,
-                           HttpServletRequest request, @RequestHeader(value = "Authorization",required = true) String token, HttpServletResponse response) throws IOException {
+                           HttpServletRequest request, @RequestHeader(value = "Authorization",required = true) String token, HttpServletResponse response) throws Exception {
 
         if (token.equals("") || token.split(" ")[1].equals("")) {
             response.setStatus(403);
@@ -152,12 +152,8 @@ public class UserController {
         info.setImgPath(filePath);
         infoRepo.save(info);
         naverApi.setPath(filePath);
-        naverApi.start();
-        try {
-            naverApi.join();
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        }
+        naverApi.setInfo_id(info.getInfo_id());
+        naverApi.naverRequset();
 
     }
 
