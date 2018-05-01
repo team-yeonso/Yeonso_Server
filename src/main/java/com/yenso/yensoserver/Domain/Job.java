@@ -9,16 +9,19 @@ import java.io.Serializable;
 @Getter
 @Setter
 @Entity
-public class Category implements Serializable {
+public class Job implements Serializable {
 
     @Id
-    @OneToOne
-    @JoinColumn(name = "info_id")
-    private Info info_id;
+    @GeneratedValue(strategy = GenerationType.AUTO)
+    private int job_id;
 
-    @Column
+    @Column(unique = true)
     private String category;
 
     @Column
     private String job;
+
+    @OneToOne
+    @JoinColumn(name = "info_id")
+    private Info info_id;
 }
