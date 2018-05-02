@@ -15,10 +15,10 @@ public class Jwt {
     @Value("${key}")
     private String key;
 
-    public String builder(String value,Long exp){
-        Map<String,Object> m = new HashMap<>(); // JWT PAYLOAD 원하는 내용 Input
-        m.put("id",value);
-        return Jwts.builder().setSubject(value).setExpiration(new Date(exp)).setIssuedAt(new Date(System.currentTimeMillis())).addClaims(m).signWith(SignatureAlgorithm.HS512,key).compact();
+    public String builder(String value, String type, Long exp){
+        Map<String,Object> jwtMap = new HashMap<>(); // JWT PAYLOAD 원하는 내용 Input
+        jwtMap.put("id",value);
+        return Jwts.builder().setSubject(value).setExpiration(new Date(exp)).setIssuedAt(new Date(System.currentTimeMillis())).addClaims(jwtMap).signWith(SignatureAlgorithm.HS512,key).compact();
     }
 
 

@@ -53,11 +53,6 @@ public class UserController {
     private CelebrityRepo celebrityRepo;
     @Autowired
     private NaverApi naverApi;
-
-    @Value("${spring.mvc.static-path-pattern}")
-    private String root;
-    ExecutorService service = Executors.newFixedThreadPool(10);
-
     private final Long expAccessToken = (long) (24 * 60 * 60 * 1000);
 
 
@@ -71,8 +66,7 @@ public class UserController {
         JSONObject obj = new JSONObject();
         String user_id = userRepo.findByEmail(data.getEmail(), crypto.encode(data.getPassword()));
         if (config.isEmpty(user_id)) {
-            Long time = System.currentTimeMillis() + expAccessToken;
-            obj.put("token", jwt.builder(user_id,time));
+            obj.put("token", jwt.builder(user_id,"access", System.currentTimeMillis() + expAccessToken));
             response.setStatus(200);
         } else {
             obj.put("error", "login is not success");
@@ -134,7 +128,7 @@ public class UserController {
     public void uploadFile(@ApiParam(name = "file", value = "file", required = true) @RequestPart(required = true) MultipartFile file,
                            HttpServletRequest request, @RequestHeader(value = "Authorization",required = true) String token, HttpServletResponse response) throws Exception {
 
-        if (token.equals("") || token.split(" ")[1].equals("")) {
+        if (token.equals("") || token.replaceAll(" ","").split("JWT")[1].equals("")) {
             response.setStatus(403);
             return;
         }
@@ -154,6 +148,12 @@ public class UserController {
         naverApi.setPath(filePath);
         naverApi.setInfo_id(info.getInfo_id());
         naverApi.naverRequset();
+
+    }
+
+    @RequestMapping(value = "/refresh",method = RequestMethod.POST)
+    @ApiOperation(value = "토큰 재발급")
+    public void refreshToken(@RequestBody Map<String,Object> map){
 
     }
 
