@@ -1,5 +1,6 @@
 package com.yenso.yensoserver.RestController;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yenso.yensoserver.Domain.Celebrity;
 import com.yenso.yensoserver.Domain.DTO.UserAuthDTO;
 import com.yenso.yensoserver.Domain.DTO.UserDTO;
@@ -20,6 +21,8 @@ import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -54,6 +57,7 @@ public class UserController {
     @Autowired
     private NaverApi naverApi;
     private final Long expAccessToken = (long) (24 * 60 * 60 * 1000);
+    private final Long expRefreshToken = (long) ( 14  * 24 * 60 * 60 * 1000);
 
 
     @ApiOperation(value = "로그인")
@@ -66,7 +70,7 @@ public class UserController {
         JSONObject obj = new JSONObject();
         String user_id = userRepo.findByEmail(data.getEmail(), crypto.encode(data.getPassword()));
         if (config.isEmpty(user_id)) {
-            obj.put("token", jwt.builder(user_id,"access", System.currentTimeMillis() + expAccessToken));
+            obj.put("token", jwt.builder(user_id, "access", System.currentTimeMillis() + expAccessToken));
             response.setStatus(200);
         } else {
             obj.put("error", "login is not success");
@@ -100,11 +104,11 @@ public class UserController {
     // TODO : 메소드 분할화 필요
     @ApiOperation(value = "회원 인증")
     @ApiResponses({
-            @ApiResponse(code = 200,message = "회원 인증 성공"),
-            @ApiResponse(code = 400,message = "회원 인증 실패")
+            @ApiResponse(code = 200, message = "회원 인증 성공"),
+            @ApiResponse(code = 400, message = "회원 인증 실패")
     })
     @RequestMapping(value = "/auth", method = RequestMethod.PATCH)
-    public void userAuth(@ApiParam(name = "data",value = "code", required = true)
+    public void userAuth(@ApiParam(name = "data", value = "code", required = true)
                          @RequestBody Map<String, Object> data, HttpServletResponse response) {
         String uuid = (String) data.get("code");
         UserAuth userData = authRepo.findUserInfo(uuid);
@@ -125,18 +129,12 @@ public class UserController {
 
     @RequestMapping(value = "/image", method = RequestMethod.POST)
     @ApiOperation(value = "이미지 업로드")
-    public void uploadFile(@ApiParam(name = "file", value = "file", required = true) @RequestPart(required = true) MultipartFile file,
-                           HttpServletRequest request, @RequestHeader(value = "Authorization",required = true) String token, HttpServletResponse response) throws Exception {
-
-        if (token.equals("") || token.replaceAll(" ","").split("JWT")[1].equals("")) {
-            response.setStatus(403);
-            return;
-        }
-
+    public void uploadFile(@ApiParam(name = "file", value = "file", required = true) @RequestPart MultipartFile file,
+                           HttpServletRequest request, @RequestHeader(value = "Authorization") String token, HttpServletResponse response) throws Exception {
         File saveFile;
         String filePath;
         String pathSet = request.getSession().getServletContext().getRealPath("static");
-        Info info = infoRepo.findByUserId( Long.valueOf((String) jwt.parser(token.split(" ")[1])));
+        Info info = infoRepo.findByUserId(Long.valueOf((String) jwt.parser(Jwt.filterToken(token))));
         do {
             filePath = pathSet + "\\" + new RandomString().make(32) + file.getOriginalFilename();
             saveFile = new File(filePath);
@@ -148,13 +146,12 @@ public class UserController {
         naverApi.setPath(filePath);
         naverApi.setInfo_id(info.getInfo_id());
         naverApi.naverRequset();
-
     }
 
-    @RequestMapping(value = "/refresh",method = RequestMethod.POST)
+    @RequestMapping(value = "/refresh", method = RequestMethod.POST)
     @ApiOperation(value = "토큰 재발급")
-    public void refreshToken(@RequestBody Map<String,Object> map){
-
+    public ResponseEntity<String> refreshToken(@RequestHeader(value = "Authorization") String token) {
+        return new ResponseEntity<String>(jwt.builder(String.valueOf(jwt.parser(Jwt.filterToken(token))), "access", expRefreshToken),HttpStatus.CREATED);
     }
 
 }

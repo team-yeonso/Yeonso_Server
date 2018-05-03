@@ -18,7 +18,8 @@ public class Jwt {
     public String builder(String value, String type, Long exp){
         Map<String,Object> jwtMap = new HashMap<>(); // JWT PAYLOAD 원하는 내용 Input
         jwtMap.put("id",value);
-        return Jwts.builder().setSubject(value).setExpiration(new Date(exp)).setIssuedAt(new Date(System.currentTimeMillis())).addClaims(jwtMap).signWith(SignatureAlgorithm.HS512,key).compact();
+        jwtMap.put("type",type);
+        return Jwts.builder().setHeaderParam("typ","JWT").setSubject(value).setExpiration(new Date(exp)).setIssuedAt(new Date(System.currentTimeMillis())).addClaims(jwtMap).signWith(SignatureAlgorithm.HS512,key).compact();
     }
 
 
@@ -26,5 +27,7 @@ public class Jwt {
         return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().get("id");
     }
 
-
+    public static String filterToken(String token){
+        return token.replaceAll(" ", "").split("JWT")[1];
+    }
 }

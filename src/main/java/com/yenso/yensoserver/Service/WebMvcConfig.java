@@ -25,7 +25,7 @@ public class WebMvcConfig implements WebMvcConfigurer {
         List<String> pathList = new ArrayList<>();
         pathList.add("/user/sign-up");
         pathList.add("/user/sign-in");
-
+        pathList.add("/user/auth");
         registry.addInterceptor(jwtHandler).addPathPatterns("/user/**").excludePathPatterns(pathList);
 
     }
