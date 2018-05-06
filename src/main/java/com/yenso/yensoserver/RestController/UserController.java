@@ -1,6 +1,5 @@
 package com.yenso.yensoserver.RestController;
 
-import com.fasterxml.jackson.databind.ObjectMapper;
 import com.yenso.yensoserver.Domain.Celebrity;
 import com.yenso.yensoserver.Domain.DTO.UserAuthDTO;
 import com.yenso.yensoserver.Domain.DTO.UserDTO;
@@ -12,6 +11,8 @@ import com.yenso.yensoserver.Repository.InfoRepo;
 import com.yenso.yensoserver.Repository.UserAuthRepo;
 import com.yenso.yensoserver.Repository.UserRepo;
 import com.yenso.yensoserver.Service.*;
+import com.yenso.yensoserver.Service.Reqeust.NaverApi;
+import com.yenso.yensoserver.Service.Response.ResponseApi;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import io.swagger.annotations.ApiResponse;
@@ -20,7 +21,6 @@ import net.bytebuddy.utility.RandomString;
 import org.json.simple.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -29,11 +29,8 @@ import org.springframework.web.multipart.MultipartFile;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
-import java.io.IOException;
 import java.util.Map;
 import java.util.UUID;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
 
 @RequestMapping("/user")
 @RestController
@@ -129,8 +126,8 @@ public class UserController {
 
     @RequestMapping(value = "/image", method = RequestMethod.POST)
     @ApiOperation(value = "이미지 업로드")
-    public void uploadFile(@ApiParam(name = "file", value = "file", required = true) @RequestPart MultipartFile file,
-                           HttpServletRequest request, @RequestHeader(value = "Authorization") String token, HttpServletResponse response) throws Exception {
+    public ResponseEntity<ResponseApi> uploadFile(@ApiParam(name = "file", value = "file", required = true) @RequestPart MultipartFile file,
+                                                  HttpServletRequest request, @RequestHeader(value = "Authorization") String token, HttpServletResponse response) throws Exception {
         File saveFile;
         String filePath;
         String pathSet = request.getSession().getServletContext().getRealPath("static");
@@ -143,9 +140,7 @@ public class UserController {
         file.transferTo(saveFile);
         info.setImgPath(filePath);
         infoRepo.save(info);
-        naverApi.setPath(filePath);
-        naverApi.setInfo_id(info.getInfo_id());
-        naverApi.naverRequset();
+         return new ResponseEntity<>(naverApi.celebritySearch(info.getInfo_id(), filePath), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/refresh", method = RequestMethod.POST)
