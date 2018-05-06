@@ -7,7 +7,7 @@ import lombok.Setter;
 @Setter
 @Getter
 @NoArgsConstructor
-public class ApiResponse {
+public class ResponseApi {
 
     private Integer confidence;
     private String celebrity;
