@@ -11,6 +11,8 @@ import com.yenso.yensoserver.Repository.InfoRepo;
 import com.yenso.yensoserver.Repository.UserAuthRepo;
 import com.yenso.yensoserver.Repository.UserRepo;
 import com.yenso.yensoserver.Service.*;
+import com.yenso.yensoserver.Service.Mail.EmailService;
+import com.yenso.yensoserver.Service.Mail.EmailServiceImpl;
 import com.yenso.yensoserver.Service.Reqeust.NaverApi;
 import com.yenso.yensoserver.Service.Response.ResponseApi;
 import io.swagger.annotations.ApiOperation;
@@ -26,6 +28,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.mail.SendFailedException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
@@ -37,21 +40,22 @@ import java.util.UUID;
 public class UserController {
 
     @Autowired
-    private Config config;
-    @Autowired
     private UserRepo userRepo;
     @Autowired
     private UserAuthRepo authRepo;
-    @Autowired
-    private Crypto crypto;
-    @Autowired
-    private Jwt jwt;
     @Autowired
     private InfoRepo infoRepo;
     @Autowired
     private CelebrityRepo celebrityRepo;
     @Autowired
+    private Crypto crypto;
+    @Autowired
+    private Jwt jwt;
+    @Autowired
     private NaverApi naverApi;
+    @Autowired
+    private EmailServiceImpl emailService;
+
     private final Long expAccessToken = (long) (24 * 60 * 60 * 1000);
     private final Long expRefreshToken = (long) (14 * 24 * 60 * 60 * 1000);
 
@@ -65,7 +69,7 @@ public class UserController {
     public JSONObject signIn(@RequestBody UserAuthDTO data, HttpServletResponse response) throws Exception {
         JSONObject obj = new JSONObject();
         String user_id = userRepo.findByEmail(data.getEmail(), crypto.encode(data.getPassword()));
-        if (config.isEmpty(user_id)) {
+        if (Config.isEmpty(user_id)) {
             obj.put("accessToken", jwt.builder(user_id, "access", System.currentTimeMillis() + expAccessToken));
             obj.put("refreshToken", jwt.builder(user_id, "refresh", System.currentTimeMillis() + expRefreshToken));
             response.setStatus(200);
@@ -85,9 +89,11 @@ public class UserController {
     @RequestMapping(value = "/sign-up", method = RequestMethod.POST)
     public void signUp(@RequestBody UserAuthDTO data, HttpServletResponse response) {
         try {
-            if (!config.isEmpty(authRepo.findUser(data.getEmail())) && !config.isEmpty(userRepo.findUser(data.getEmail()))) {
-                authRepo.save(data.toEntity(crypto.encode(data.getPassword()), UUID.randomUUID().toString().replace("-", "")));
+            if (!Config.isEmpty(authRepo.findUser(data.getEmail())) && !Config.isEmpty(userRepo.findUser(data.getEmail()))) {
+                UserAuth auth = authRepo.save(data.toEntity(crypto.encode(data.getPassword()), UUID.randomUUID().toString().replace("-", "")));
+                emailService.sendMessage(data.getEmail(),"연소 인증 코드","옆의 코드를 어플에 입력해주세요!!  :   "+auth.getCode());
                 response.setStatus(201);
+
             } else {
                 throw new Exception("Already User SignUp : " + data.getEmail());
             }
