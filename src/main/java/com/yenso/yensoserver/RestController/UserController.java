@@ -41,7 +41,6 @@ public class UserController {
     @Autowired
     private UserRepo userRepo;
     @Autowired
-    @Qualifier("UserRepo")
     private UserAuthRepo authRepo;
     @Autowired
     private Crypto crypto;
@@ -54,7 +53,7 @@ public class UserController {
     @Autowired
     private NaverApi naverApi;
     private final Long expAccessToken = (long) (24 * 60 * 60 * 1000);
-    private final Long expRefreshToken = (long) ( 14  * 24 * 60 * 60 * 1000);
+    private final Long expRefreshToken = (long) (14 * 24 * 60 * 60 * 1000);
 
 
     @ApiOperation(value = "로그인")
@@ -67,7 +66,8 @@ public class UserController {
         JSONObject obj = new JSONObject();
         String user_id = userRepo.findByEmail(data.getEmail(), crypto.encode(data.getPassword()));
         if (config.isEmpty(user_id)) {
-            obj.put("token", jwt.builder(user_id, "access", System.currentTimeMillis() + expAccessToken));
+            obj.put("accessToken", jwt.builder(user_id, "access", System.currentTimeMillis() + expAccessToken));
+            obj.put("refreshToken", jwt.builder(user_id, "refresh", System.currentTimeMillis() + expRefreshToken));
             response.setStatus(200);
         } else {
             obj.put("error", "login is not success");
@@ -127,26 +127,24 @@ public class UserController {
     @RequestMapping(value = "/image", method = RequestMethod.POST)
     @ApiOperation(value = "이미지 업로드")
     public ResponseEntity<ResponseApi> uploadFile(@ApiParam(name = "file", value = "file", required = true) @RequestPart MultipartFile file,
-                                                  HttpServletRequest request, @RequestHeader(value = "Authorization") String token, HttpServletResponse response) throws Exception {
+                                                  HttpServletRequest request, @RequestHeader(value = "Authorization") String token) throws Exception {
         File saveFile;
-        String filePath;
-        String pathSet = request.getSession().getServletContext().getRealPath("static");
         Info info = infoRepo.findByUserId(Long.valueOf((String) jwt.parser(Jwt.filterToken(token))));
         do {
-            filePath = pathSet + "\\" + new RandomString().make(32) + file.getOriginalFilename();
-            saveFile = new File(filePath);
+            saveFile = new File(request.getSession().getServletContext().getRealPath("static") + "\\" + RandomString.make(32) + file.getOriginalFilename());
         } while (saveFile.exists());
         saveFile.getParentFile().mkdirs();
         file.transferTo(saveFile);
-        info.setImgPath(filePath);
+        info.setImgPath(saveFile.getPath());
         infoRepo.save(info);
-         return new ResponseEntity<>(naverApi.celebritySearch(info.getInfo_id(), filePath), HttpStatus.OK);
+        return new ResponseEntity<>(naverApi.celebritySearch(info.getInfo_id(), saveFile.getPath()), HttpStatus.OK);
     }
 
     @RequestMapping(value = "/refresh", method = RequestMethod.POST)
     @ApiOperation(value = "토큰 재발급")
-    public ResponseEntity<String> refreshToken(@RequestHeader(value = "Authorization") String token) {
-        return new ResponseEntity<String>(jwt.builder(String.valueOf(jwt.parser(Jwt.filterToken(token))), "access", expRefreshToken),HttpStatus.CREATED);
+    public ResponseEntity<Object> refreshToken(@RequestHeader(value = "Authorization") String token) {
+        JSONObject jsonObject = new JSONObject();
+        jsonObject.put("refreshToken", jwt.builder(String.valueOf(jwt.parser(Jwt.filterToken(token))), "access", System.currentTimeMillis() + expAccessToken));
+        return new ResponseEntity<>(jsonObject, HttpStatus.CREATED);
     }
-
 }

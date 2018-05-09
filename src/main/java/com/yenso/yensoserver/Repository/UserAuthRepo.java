@@ -10,7 +10,7 @@ import org.springframework.stereotype.Component;
 import javax.transaction.Transactional;
 
 
-@Component("UserRepo")
+@Component
 public interface UserAuthRepo extends JpaRepository<UserAuth,Long> {
 
     @Query(value = "select * from user_auth where email=:email",nativeQuery = true)
