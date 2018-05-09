@@ -52,8 +52,7 @@ public class NaverApi implements InitializingBean {
         Celebrity celebrity = celebrityRepo.findByInfoId(id);
         String name = (String) celebrityData.get("value");
         celebrity.setCelebrity(name);
-        double t = Double.parseDouble(String.valueOf(celebrityData.get("confidence")));
-        celebrity.setConfidence((int) (100 * t));
+        celebrity.setConfidence((int) (100 * Double.parseDouble(String.valueOf(celebrityData.get("confidence")))));
         celebrityRepo.save(celebrity);
         response = kakaoApi.imageSearch(id, name);
         response.setImg_path(path);
