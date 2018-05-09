@@ -18,10 +18,4 @@ public class Job implements Serializable {
     @Column(unique = true)
     private String category;
 
-    @Column
-    private String job;
-
-    @OneToOne
-    @JoinColumn(name = "info_id")
-    private Info info_id;
 }
