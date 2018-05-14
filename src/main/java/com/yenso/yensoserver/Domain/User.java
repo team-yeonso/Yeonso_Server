@@ -1,13 +1,11 @@
 package com.yenso.yensoserver.Domain;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
 
+@Setter
 @Getter
 @NoArgsConstructor
 @AllArgsConstructor
