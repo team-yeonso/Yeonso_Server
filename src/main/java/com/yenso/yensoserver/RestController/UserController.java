@@ -1,7 +1,6 @@
 package com.yenso.yensoserver.RestController;
 
 import com.yenso.yensoserver.Domain.Celebrity;
-import com.yenso.yensoserver.Domain.DTO.PassWordDTO;
 import com.yenso.yensoserver.Domain.DTO.UserAuthDTO;
 import com.yenso.yensoserver.Domain.DTO.UserDTO;
 import com.yenso.yensoserver.Domain.Info;
@@ -33,7 +32,6 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.util.Map;
-import java.util.Optional;
 import java.util.UUID;
 
 @RequestMapping("/user")
@@ -152,15 +150,15 @@ public class UserController {
         return new ResponseEntity<>(naverApi.celebritySearch(info.getInfo_id(), saveFile.getPath()), HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/find/Password", method = RequestMethod.PATCH)
+    @RequestMapping(value = "/find/password", method = RequestMethod.PATCH)
     @ApiOperation(value = "비밀번호 찾기")
-    public void findpasword(@RequestBody PassWordDTO passWordDTO) throws UserEmailException {
-        String email = passWordDTO.toEntity().getEmail();
+    public void findpasword(@RequestBody Map<String,String> userMap) throws UserEmailException {
+        String email = userMap.get("email");
         String rePassword = UUID.randomUUID().toString().replace("-", "");
         User user = userRepo.findByEmail(email).orElseThrow(() -> new UserEmailException(email + "  :  에해당하는 이메일로 정보를 찾지못함"));
         user.setPassword(rePassword);
         userRepo.save(user);
-        emailService.sendMessage(passWordDTO.toEntity().getEmail(), "연소 임시 비밀번호 입니다", rePassword);
+        emailService.sendMessage(email, "연소 임시 비밀번호 입니다", rePassword);
     }
 
     @RequestMapping(value = "/refresh", method = RequestMethod.POST)
