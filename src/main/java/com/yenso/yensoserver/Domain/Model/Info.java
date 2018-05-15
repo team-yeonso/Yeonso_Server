@@ -1,12 +1,12 @@
-package com.yenso.yensoserver.Domain;
+package com.yenso.yensoserver.Domain.Model;
 
+import com.yenso.yensoserver.Domain.EnumEntity.Gender;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
-@Setter
 @Getter
 @NoArgsConstructor
 @Entity

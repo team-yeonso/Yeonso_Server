@@ -1,14 +1,13 @@
-package com.yenso.yensoserver.Domain;
+package com.yenso.yensoserver.Domain.Model;
 
 import lombok.*;
 
 import javax.persistence.*;
 
-@Setter
-@Getter
 @NoArgsConstructor
+@Getter
 @Entity
-public class UserAuth {
+public class TempUser {
 
     @Id
     private String email;
@@ -20,7 +19,7 @@ public class UserAuth {
     private String code;
 
     @Builder
-    public UserAuth(String email, String password, String code) {
+    public TempUser(String email, String password, String code) {
         this.email = email;
         this.password = password;
         this.code = code;

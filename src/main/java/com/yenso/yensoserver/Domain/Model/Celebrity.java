@@ -1,4 +1,4 @@
-package com.yenso.yensoserver.Domain;
+package com.yenso.yensoserver.Domain.Model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -6,7 +6,6 @@ import lombok.Setter;
 import javax.persistence.*;
 
 @Getter
-@Setter
 @Entity
 public class Celebrity {
 

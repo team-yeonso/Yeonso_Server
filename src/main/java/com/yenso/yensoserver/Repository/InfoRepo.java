@@ -1,6 +1,6 @@
 package com.yenso.yensoserver.Repository;
 
-import com.yenso.yensoserver.Domain.Info;
+import com.yenso.yensoserver.Domain.Model.Info;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

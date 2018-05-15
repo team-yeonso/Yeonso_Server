@@ -1,4 +1,4 @@
-package com.yenso.yensoserver.Domain;
+package com.yenso.yensoserver.Domain.EnumEntity;
 
 import lombok.Getter;
 

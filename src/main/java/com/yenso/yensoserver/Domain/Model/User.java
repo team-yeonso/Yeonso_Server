@@ -1,14 +1,12 @@
-package com.yenso.yensoserver.Domain;
+package com.yenso.yensoserver.Domain.Model;
 
 import lombok.*;
 
 import javax.persistence.*;
 import java.util.Date;
 
-@Setter
 @Getter
 @NoArgsConstructor
-@AllArgsConstructor
 @Entity
 public class User {
 

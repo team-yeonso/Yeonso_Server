@@ -1,7 +1,7 @@
 package com.yenso.yensoserver.Repository;
 
 
-import com.yenso.yensoserver.Domain.User;
+import com.yenso.yensoserver.Domain.Model.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

@@ -1,7 +1,7 @@
 package com.yenso.yensoserver.Service.Reqeust;
 
 import com.google.gson.Gson;
-import com.yenso.yensoserver.Domain.Celebrity;
+import com.yenso.yensoserver.Domain.Model.Celebrity;
 import com.yenso.yensoserver.Repository.CelebrityRepo;
 import com.yenso.yensoserver.Service.Response.ResponseApi;
 import org.springframework.beans.factory.InitializingBean;

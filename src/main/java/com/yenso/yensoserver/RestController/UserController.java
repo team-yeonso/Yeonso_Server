@@ -1,11 +1,11 @@
 package com.yenso.yensoserver.RestController;
 
-import com.yenso.yensoserver.Domain.Celebrity;
+import com.yenso.yensoserver.Domain.Model.Celebrity;
 import com.yenso.yensoserver.Domain.DTO.UserAuthDTO;
 import com.yenso.yensoserver.Domain.DTO.UserDTO;
-import com.yenso.yensoserver.Domain.Info;
-import com.yenso.yensoserver.Domain.User;
-import com.yenso.yensoserver.Domain.UserAuth;
+import com.yenso.yensoserver.Domain.Model.Info;
+import com.yenso.yensoserver.Domain.Model.User;
+import com.yenso.yensoserver.Domain.Model.TempUser;
 import com.yenso.yensoserver.Repository.CelebrityRepo;
 import com.yenso.yensoserver.Repository.InfoRepo;
 import com.yenso.yensoserver.Repository.UserAuthRepo;
@@ -95,7 +95,7 @@ public class UserController {
     public void signUp(@RequestBody UserAuthDTO data, HttpServletResponse response) {
         try {
             if (!Config.isEmpty(authRepo.findUser(data.getEmail())) && !Config.isEmpty(userRepo.findUser(data.getEmail()))) {
-                UserAuth auth = authRepo.save(data.toEntity(crypto.encode(data.getPassword()), UUID.randomUUID().toString().replace("-", "")));
+                TempUser auth = authRepo.save(data.toEntity(crypto.encode(data.getPassword()), UUID.randomUUID().toString().replace("-", "")));
                 emailService.sendMessage(data.getEmail(), "연소 인증 코드", "옆의 코드를 어플에 입력해주세요!!  :   " + auth.getCode());
                 response.setStatus(201);
 
@@ -118,7 +118,7 @@ public class UserController {
     @RequestMapping(value = "/auth", method = RequestMethod.PATCH)
     public void userAuth(@ApiParam(name = "data", value = "code", required = true)
                          @RequestBody Map<String, String> data, HttpServletResponse response) {
-        UserAuth userData = authRepo.findUserInfo(data.get("code"));
+        TempUser userData = authRepo.findUserInfo(data.get("code"));
         if (userData != null) {
             Info info = new Info();
             Celebrity celebrity = new Celebrity();

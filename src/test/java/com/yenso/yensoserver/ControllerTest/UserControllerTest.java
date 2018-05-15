@@ -1,8 +1,7 @@
 package com.yenso.yensoserver.ControllerTest;
 
 import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.yenso.yensoserver.Domain.User;
+import com.yenso.yensoserver.Domain.Model.User;
 import com.yenso.yensoserver.Repository.UserRepo;
 import org.junit.Before;
 import org.junit.Test;

@@ -1,6 +1,6 @@
 package com.yenso.yensoserver.Domain.DTO;
 
-import com.yenso.yensoserver.Domain.UserAuth;
+import com.yenso.yensoserver.Domain.Model.TempUser;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
@@ -13,8 +13,8 @@ public class UserAuthDTO {
     private String email;
     private String password;
 
-    public UserAuth toEntity(String enPassword, String code) {
-        return UserAuth.builder()
+    public TempUser toEntity(String enPassword, String code) {
+        return TempUser.builder()
                 .email(email)
                 .password(enPassword)
                 .code(code)

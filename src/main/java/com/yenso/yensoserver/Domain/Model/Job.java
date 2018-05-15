@@ -1,4 +1,4 @@
-package com.yenso.yensoserver.Domain;
+package com.yenso.yensoserver.Domain.Model;
 
 import lombok.Getter;
 import lombok.Setter;
@@ -7,7 +7,6 @@ import javax.persistence.*;
 import java.io.Serializable;
 
 @Getter
-@Setter
 @Entity
 public class Job implements Serializable {
 

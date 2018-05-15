@@ -1,15 +1,16 @@
-package com.yenso.yensoserver.Domain;
+package com.yenso.yensoserver.Domain.Model;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
 import javax.persistence.*;
 import java.io.Serializable;
 
+@AllArgsConstructor
 @Getter
-@Setter
 @Entity
-public class Address implements Serializable{
+public class Age implements Serializable {
 
     @Id
     @OneToOne
@@ -17,12 +18,6 @@ public class Address implements Serializable{
     private Info info_id;
 
     @Column
-    private String state;
-
-    @Column
-    private String state_group;
-
-    @Column
-    private String road;
+    private Integer age;
 
 }

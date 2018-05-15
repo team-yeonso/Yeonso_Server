@@ -1,6 +1,6 @@
 package com.yenso.yensoserver.Repository;
 
-import com.yenso.yensoserver.Domain.UserAuth;
+import com.yenso.yensoserver.Domain.Model.TempUser;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
@@ -11,14 +11,14 @@ import javax.transaction.Transactional;
 
 
 @Component
-public interface UserAuthRepo extends JpaRepository<UserAuth,Long> {
+public interface UserAuthRepo extends JpaRepository<TempUser,Long> {
 
     @Query(value = "select * from user_auth where email=:email",nativeQuery = true)
-    UserAuth findUser(@Param("email") String email);
+    TempUser findUser(@Param("email") String email);
 
     @Transactional
     @Query(value = "select * from user_auth where code=:code",nativeQuery = true)
-    UserAuth findUserInfo(@Param("code") String code);
+    TempUser findUserInfo(@Param("code") String code);
 
     @Transactional
     @Modifying

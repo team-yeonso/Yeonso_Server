@@ -1,6 +1,6 @@
 package com.yenso.yensoserver.Service;
 
-import com.yenso.yensoserver.Domain.Job;
+import com.yenso.yensoserver.Domain.Model.Job;
 import com.yenso.yensoserver.Repository.JobRepo;
 import org.apache.poi.ss.usermodel.*;
 import org.apache.poi.xssf.usermodel.XSSFWorkbook;
