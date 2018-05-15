@@ -12,7 +12,7 @@ public class Job implements Serializable {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private int job_id;
+    private Long job_id;
 
     @Column(unique = true)
     private String category;

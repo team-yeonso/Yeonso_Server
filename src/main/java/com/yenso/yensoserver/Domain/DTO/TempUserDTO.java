@@ -8,10 +8,11 @@ import org.springframework.stereotype.Component;
 @Getter
 @Setter
 @Component
-public class UserAuthDTO {
+public class TempUserDTO {
 
     private String email;
     private String password;
+    private String code;
 
     public TempUser toEntity(String enPassword, String code) {
         return TempUser.builder()

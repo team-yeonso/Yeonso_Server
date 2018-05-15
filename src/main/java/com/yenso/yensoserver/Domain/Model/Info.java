@@ -1,6 +1,7 @@
 package com.yenso.yensoserver.Domain.Model;
 
 import com.yenso.yensoserver.Domain.EnumEntity.Gender;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
@@ -43,4 +44,15 @@ public class Info {
     @JoinColumn(name = "user_id")
     private User u_id;
 
+    @Builder
+    public Info(Gender gender, double weight, double height, boolean marriage, String imgPath, String job, Job job_id, User u_id) {
+        this.gender = gender;
+        this.weight = weight;
+        this.height = height;
+        this.marriage = marriage;
+        this.imgPath = imgPath;
+        this.job = job;
+        this.job_id = job_id;
+        this.u_id = u_id;
+    }
 }
