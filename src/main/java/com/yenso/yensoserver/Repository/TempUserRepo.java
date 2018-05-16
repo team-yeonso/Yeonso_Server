@@ -15,7 +15,7 @@ import java.util.Optional;
 @Component
 public interface TempUserRepo extends JpaRepository<TempUser,Long> {
 
-    boolean findByEmailAndEmailIsNotNull (String email);
+    boolean existsByEmail(String email);
 
     Optional<TempUserDTO> findByCode(String code);
 

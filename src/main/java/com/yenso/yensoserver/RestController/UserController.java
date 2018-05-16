@@ -1,16 +1,13 @@
 package com.yenso.yensoserver.RestController;
 
 import com.yenso.yensoserver.Domain.DTO.*;
-import com.yenso.yensoserver.Domain.Model.Celebrity;
 import com.yenso.yensoserver.Domain.Model.Info;
-import com.yenso.yensoserver.Domain.Model.TempUser;
 import com.yenso.yensoserver.Domain.Model.User;
 import com.yenso.yensoserver.Repository.CelebrityRepo;
 import com.yenso.yensoserver.Repository.InfoRepo;
 import com.yenso.yensoserver.Repository.TempUserRepo;
 import com.yenso.yensoserver.Repository.UserRepo;
 import com.yenso.yensoserver.Service.*;
-import com.yenso.yensoserver.Service.Exceptions.UserCodeException;
 import com.yenso.yensoserver.Service.Exceptions.UserEmailException;
 import com.yenso.yensoserver.Service.Mail.EmailServiceImpl;
 import io.swagger.annotations.ApiOperation;
@@ -23,8 +20,6 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import javax.servlet.http.HttpServletResponse;
-import java.util.Map;
 import java.util.UUID;
 
 @RequestMapping("/user")
@@ -43,7 +38,9 @@ public class UserController {
     private static final Long expRefreshToken = (long) (14 * 24 * 60 * 60 * 1000);
 
     @Autowired
-    public UserController(@Qualifier("userRepo") UserRepo userRepo, TempUserRepo tempUserRepo, @Qualifier("infoRepo") InfoRepo infoRepo, CelebrityRepo celebrityRepo, Crypto crypto, Jwt jwt, EmailServiceImpl emailService) {
+    public UserController(@Qualifier("userRepo") UserRepo userRepo, TempUserRepo tempUserRepo,
+                          @Qualifier("infoRepo") InfoRepo infoRepo, CelebrityRepo celebrityRepo,
+                          Crypto crypto, Jwt jwt, EmailServiceImpl emailService) {
         this.userRepo = userRepo;
         this.tempUserRepo = tempUserRepo;
         this.infoRepo = infoRepo;
@@ -73,8 +70,8 @@ public class UserController {
             @ApiResponse(code = 400, message = "잘못된 요청 ")
     })
     @RequestMapping(value = "/sign-up", method = RequestMethod.POST)
-    public ResponseEntity<Void> signUp(@RequestBody TempUserDTO data, HttpServletResponse response) throws Exception {
-        if (tempUserRepo.findByEmailAndEmailIsNotNull(data.getEmail()) && userRepo.findByEmailAndEmailIsNotNull(data.getEmail())) {
+    public ResponseEntity<Void> signUp(@RequestBody TempUserDTO data) throws Exception {
+        if (!tempUserRepo.existsByEmail(data.getEmail()) && !userRepo.existsByEmail(data.getEmail())) {
             String uuid = UUID.randomUUID().toString().replace("-", "");
             tempUserRepo.save(data.toEntity(crypto.encode(data.getPassword()), uuid));
             emailService.sendMessage(data.getEmail(), "연소 인증 코드", "옆의 코드를 어플에 입력해주세요!!  :   " + uuid);
@@ -106,7 +103,7 @@ public class UserController {
 
     @RequestMapping(value = "/find/password", method = RequestMethod.PATCH)
     @ApiOperation(value = "비밀번호 찾기")
-    public ResponseEntity<Void> findpasword(@RequestBody UserDTO userData) throws UserEmailException {
+    public ResponseEntity<Void> findPassWord(@RequestBody UserDTO userData) throws UserEmailException {
         String email = userData.getEmail();
         String rePassword = UUID.randomUUID().toString().replace("-", "");
         userData = userRepo.findByEmail(email).orElseThrow(() -> new UserEmailException(email + "  :  에해당하는 이메일로 정보를 찾지못함"));
