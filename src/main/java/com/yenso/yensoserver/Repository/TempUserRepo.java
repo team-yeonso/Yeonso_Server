@@ -13,14 +13,15 @@ import java.util.Optional;
 
 
 @Component
-public interface TempUserRepo extends JpaRepository<TempUser,Long> {
+public interface TempUserRepo extends JpaRepository<TempUser, Long> {
 
     boolean existsByEmail(String email);
 
-    Optional<TempUserDTO> findByCode(String code);
+    Optional<TempUser> findByCode(String code);
 
-//    @Transactional
-//    @Modifying
+
+    //    @Modifying
 //    @Query(value = "delete from user_auth where code=:code",nativeQuery = true)
+    @Transactional
     void deleteByCode(String code);
 }

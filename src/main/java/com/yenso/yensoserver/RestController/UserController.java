@@ -2,6 +2,7 @@ package com.yenso.yensoserver.RestController;
 
 import com.yenso.yensoserver.Domain.DTO.*;
 import com.yenso.yensoserver.Domain.Model.Info;
+import com.yenso.yensoserver.Domain.Model.TempUser;
 import com.yenso.yensoserver.Domain.Model.User;
 import com.yenso.yensoserver.Repository.CelebrityRepo;
 import com.yenso.yensoserver.Repository.InfoRepo;
@@ -58,7 +59,7 @@ public class UserController {
     @RequestMapping(value = "/sign-in", method = RequestMethod.POST)
     public ResponseEntity<TokenDTO> signIn(@RequestBody TempUserDTO data) throws Exception {
         TokenDTO tokenDTO = new TokenDTO();
-        String user_id = userRepo.findByEmailAndPassword(data.getEmail(), crypto.encode(data.getPassword())).orElseThrow((Exception::new));
+        String user_id = String.valueOf(userRepo.findByEmailAndPassword(data.getEmail(), crypto.encode(data.getPassword())).orElseThrow((Exception::new)).getUser_id());
         tokenDTO.setAccessToken(jwt.builder(user_id, "access", System.currentTimeMillis() + expAccessToken));
         tokenDTO.setRefreshToken(jwt.builder(user_id, "refresh", System.currentTimeMillis() + expRefreshToken));
         return new ResponseEntity<>(tokenDTO, HttpStatus.OK);
@@ -89,10 +90,9 @@ public class UserController {
     @RequestMapping(value = "/auth", method = RequestMethod.PATCH)
     public ResponseEntity<Void> userAuth(@ApiParam(name = "data", value = "code", required = true)
                                          @RequestBody TempUserDTO tempUserDTO) throws Exception {
-        TempUserDTO userData = tempUserRepo.findByCode(tempUserDTO.getCode()).orElseThrow(Exception::new);
         InfoDTO info = new InfoDTO();
         CelebrityDTO celebrity = new CelebrityDTO();
-        User user = userRepo.save(new UserDTO().toEntity(userData));
+        User user = userRepo.save(new UserDTO().toEntity(tempUserRepo.findByCode(tempUserDTO.getCode()).orElseThrow(Exception::new)));
         tempUserRepo.deleteByCode(tempUserDTO.getCode());
         info.setU_id(user);
         Info infoId = infoRepo.save(info.toEntity());
@@ -106,7 +106,7 @@ public class UserController {
     public ResponseEntity<Void> findPassWord(@RequestBody UserDTO userData) throws UserEmailException {
         String email = userData.getEmail();
         String rePassword = UUID.randomUUID().toString().replace("-", "");
-        userData = userRepo.findByEmail(email).orElseThrow(() -> new UserEmailException(email + "  :  에해당하는 이메일로 정보를 찾지못함"));
+        userData = userRepo.findEmail(email);
         userData.setPassword(rePassword);
         userRepo.save(userData.toEntity());
         emailService.sendMessage(email, "연소 임시 비밀번호 입니다", rePassword);

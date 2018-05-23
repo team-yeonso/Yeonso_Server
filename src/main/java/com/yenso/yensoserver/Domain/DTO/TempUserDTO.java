@@ -1,6 +1,7 @@
 package com.yenso.yensoserver.Domain.DTO;
 
 import com.yenso.yensoserver.Domain.Model.TempUser;
+import com.yenso.yensoserver.Domain.Model.User;
 import lombok.Getter;
 import lombok.Setter;
 import org.springframework.stereotype.Component;
@@ -22,5 +23,11 @@ public class TempUserDTO {
                 .build();
     }
 
+    public User converterUser(){
+        return User.builder()
+                .email(email)
+                .password(password)
+                .build();
+    }
 
 }
