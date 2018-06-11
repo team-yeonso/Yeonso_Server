@@ -12,7 +12,7 @@ import lombok.Setter;
 @Setter
 public class InfoDTO {
 
-    private Long info_id;
+    private Long id;
 
     private double weight;
 
@@ -28,7 +28,8 @@ public class InfoDTO {
 
     private Job job_id;
 
-    private User u_id;
+    private User userid;
+
 
     public Info toEntity(){
         return Info.builder()
@@ -39,7 +40,7 @@ public class InfoDTO {
                 .gender(gender)
                 .job(job)
                 .job_id(job_id)
-                .u_id(u_id)
+                .userid(userid)
                 .build();
     }
 

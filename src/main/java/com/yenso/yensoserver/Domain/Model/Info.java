@@ -8,6 +8,7 @@ import lombok.Setter;
 
 import javax.persistence.*;
 
+@Setter
 @Getter
 @NoArgsConstructor
 @Entity
@@ -15,7 +16,7 @@ public class Info {
 
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long info_id;
+    private Long id;
 
     @Enumerated(EnumType.STRING)
     @Column
@@ -42,10 +43,10 @@ public class Info {
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "user_id")
-    private User u_id;
+    private User userid;
 
     @Builder
-    public Info(Gender gender, double weight, double height, boolean marriage, String imgPath, String job, Job job_id, User u_id) {
+    public Info(Gender gender, double weight, double height, boolean marriage, String imgPath, String job, Job job_id, User userid) {
         this.gender = gender;
         this.weight = weight;
         this.height = height;
@@ -53,6 +54,6 @@ public class Info {
         this.imgPath = imgPath;
         this.job = job;
         this.job_id = job_id;
-        this.u_id = u_id;
+        this.userid = userid;
     }
 }

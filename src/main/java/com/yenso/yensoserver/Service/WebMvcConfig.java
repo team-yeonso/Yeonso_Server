@@ -24,7 +24,6 @@ public class WebMvcConfig implements WebMvcConfigurer {
     public void addInterceptors(InterceptorRegistry registry) {
         List<String> pathList = new ArrayList<>();
         registry.addInterceptor(jwtHandler).addPathPatterns("/token/**").excludePathPatterns(pathList);
-
     }
 
     @Override

@@ -7,10 +7,9 @@ import javax.persistence.*;
 
 @Getter
 @Entity
-public class Refresh_token {
+public class token {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private String refreshToken;
 
     @Column
@@ -20,7 +19,7 @@ public class Refresh_token {
     private String owner_pw;
 
     @Builder
-    public Refresh_token(String token_owner, String owner_pw) {
+    public token(String token_owner, String owner_pw) {
         this.token_owner = token_owner;
         this.owner_pw = owner_pw;
     }

@@ -11,16 +11,14 @@ import org.springframework.web.bind.annotation.RestController;
 
 import java.util.Map;
 
-@RequestMapping(value = "/Info")
-@RestController
 public class InfoController {
-
-    @Autowired
-    @Qualifier(value = "infoRepo")
-    private InfoRepo infoRepo;
-
-    @RequestMapping("/insert")
-    public void insertData(@RequestBody Map<String,Object> data, @RequestHeader(value = "Authorization")String token){
-        String jwt = Jwt.filterToken(token);
-    }
+//
+//    @Autowired
+//    @Qualifier(value = "infoRepo")
+//    private InfoRepo infoRepo;
+//
+//    @RequestMapping("/insert")
+//    public void insertData(@RequestBody Map<String,Object> data, @RequestHeader(value = "Authorization")String token){
+//        String jwt = Jwt.filterToken(token);
+//    }
 }

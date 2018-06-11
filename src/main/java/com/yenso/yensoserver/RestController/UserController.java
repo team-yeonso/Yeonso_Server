@@ -35,8 +35,8 @@ public class UserController {
     private final Jwt jwt;
     private final EmailServiceImpl emailService;
 
-    private static final Long expAccessToken = (long) (24 * 60 * 60 * 1000);
-    private static final Long expRefreshToken = (long) (14 * 24 * 60 * 60 * 1000);
+    static final Long expAccessToken = (long) (24 * 60 * 60 * 1000);
+    static final Long expRefreshToken = (long) (14 * 24 * 60 * 60 * 1000);
 
     @Autowired
     public UserController(@Qualifier("userRepo") UserRepo userRepo, TempUserRepo tempUserRepo,
@@ -94,9 +94,9 @@ public class UserController {
         CelebrityDTO celebrity = new CelebrityDTO();
         User user = userRepo.save(new UserDTO().toEntity(tempUserRepo.findByCode(tempUserDTO.getCode()).orElseThrow(Exception::new)));
         tempUserRepo.deleteByCode(tempUserDTO.getCode());
-        info.setU_id(user);
+        info.setUserid(user);
         Info infoId = infoRepo.save(info.toEntity());
-        celebrity.setInfo_field_id(infoId);
+        celebrity.setInfoValue(infoId);
         celebrityRepo.save(celebrity.toEntity());
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }

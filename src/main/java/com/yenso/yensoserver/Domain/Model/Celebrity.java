@@ -2,11 +2,14 @@ package com.yenso.yensoserver.Domain.Model;
 
 import lombok.Builder;
 import lombok.Getter;
+import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
 
+@Setter
 @Getter
+@NoArgsConstructor
 @Entity
 public class Celebrity {
 
@@ -25,13 +28,13 @@ public class Celebrity {
 
     @OneToOne(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     @JoinColumn(name = "info_id")
-    private Info info_field_id;
+    private Info infoValue;
 
     @Builder
-    public Celebrity(int confidence, String celebrity, String img_path, Info info_field_id) {
+    public Celebrity(int confidence, String celebrity, String img_path, Info infoValue) {
         this.confidence = confidence;
         this.celebrity = celebrity;
         this.img_path = img_path;
-        this.info_field_id = info_field_id;
+        this.infoValue = infoValue;
     }
 }

@@ -1,9 +1,14 @@
 package com.yenso.yensoserver.Service.Reqeust;
 
 import com.google.gson.Gson;
+import com.yenso.yensoserver.Domain.DTO.CelebrityDTO;
 import com.yenso.yensoserver.Domain.Model.Celebrity;
+import com.yenso.yensoserver.Domain.Model.Info;
 import com.yenso.yensoserver.Repository.CelebrityRepo;
+import com.yenso.yensoserver.Service.Exceptions.InfoException;
+import com.yenso.yensoserver.Service.Exceptions.UserEmailException;
 import com.yenso.yensoserver.Service.Response.ResponseApi;
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -34,12 +39,12 @@ public class KakaoApi implements InitializingBean {
         return map;
     }
 
-    public ResponseApi imageSearch(Long id, String queryName) {
+    ResponseApi imageSearch(Info id, String queryName) throws InfoException {
         restTemplate.setHeaders(createHeader());
         Map<String, Object> celebrityData = jsonParser.parseMap(new Gson().toJson(
                 restTemplate.request(kakaoUrl + "&query=" + queryName, HttpMethod.GET).get("documents"))
                 .replace("[", "").replace("]", ""));
-        Celebrity celebrity = celebrityRepo.findByInfoId(id);
+        Celebrity celebrity = celebrityRepo.findByInfoValue(id).orElseThrow(InfoException::new);
         celebrity.setImg_path((String) celebrityData.get("image_url"));
         celebrityRepo.save(celebrity);
         response.setCelebrity_path(celebrity.getImg_path());

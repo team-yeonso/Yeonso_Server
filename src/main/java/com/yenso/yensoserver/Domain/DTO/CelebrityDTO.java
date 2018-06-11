@@ -17,14 +17,14 @@ public class CelebrityDTO {
 
     private String img_path;
 
-    private Info info_field_id;
+    private Info infoValue;
 
     public Celebrity toEntity(){
         return Celebrity.builder()
                 .confidence(confidence)
                 .celebrity(celebrity)
                 .img_path(img_path)
-                .info_field_id(info_field_id)
+                .infoValue(infoValue)
                 .build();
     }
 }

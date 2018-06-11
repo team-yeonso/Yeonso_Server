@@ -6,6 +6,7 @@ import lombok.Setter;
 import javax.persistence.*;
 import java.io.Serializable;
 
+@Setter
 @Getter
 @Entity
 public class Job implements Serializable {
