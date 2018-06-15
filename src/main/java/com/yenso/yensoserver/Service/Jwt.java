@@ -23,8 +23,8 @@ public class Jwt {
     }
 
 
-    public Object parser(String token){
-        return Jwts.parser().setSigningKey(key).parseClaimsJws(token).getBody().get("id");
+    public long parser(String token){
+        return Long.valueOf((String) Jwts.parser().setSigningKey(key).parseClaimsJws(filterToken(token)).getBody().get("id"));
     }
 
     public static String filterToken(String token){

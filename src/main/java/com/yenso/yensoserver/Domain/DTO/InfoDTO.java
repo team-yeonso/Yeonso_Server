@@ -24,12 +24,11 @@ public class InfoDTO {
 
     private Gender gender;
 
-    private String job;
+    private Long job;
 
     private Job job_id;
 
     private User userid;
-
 
     public Info toEntity(){
         return Info.builder()
@@ -38,10 +37,8 @@ public class InfoDTO {
                 .marriage(marriage)
                 .imgPath(imgPath)
                 .gender(gender)
-                .job(job)
                 .job_id(job_id)
                 .userid(userid)
                 .build();
     }
-
 }

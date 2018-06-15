@@ -7,11 +7,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
-import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
 
 import java.util.ArrayList;
 import java.util.List;
-
 
 @Configuration
 @AutoConfigureAfter(DispatcherServletAutoConfiguration.class)
@@ -19,11 +17,14 @@ public class WebMvcConfig implements WebMvcConfigurer {
 
     @Autowired
     private JwtHandler jwtHandler;
+    @Autowired
+    private MapHandler mapHandler;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         List<String> pathList = new ArrayList<>();
-        registry.addInterceptor(jwtHandler).addPathPatterns("/token/**").excludePathPatterns(pathList);
+        registry.addInterceptor(jwtHandler).addPathPatterns("/token/**").addPathPatterns("/info/**").excludePathPatterns(pathList);
+        registry.addInterceptor(mapHandler).addPathPatterns("/info/**").excludePathPatterns(pathList);
     }
 
     @Override

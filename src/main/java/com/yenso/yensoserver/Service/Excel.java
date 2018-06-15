@@ -15,11 +15,11 @@ public class Excel implements InitializingBean {
     @Autowired
     private JobRepo jobRepo;
     private Workbook workbook;
+    long index = 1L;
 
     @Override
     public void afterPropertiesSet() throws Exception {
         try {
-
             workbook = new XSSFWorkbook(new FileInputStream(System.getProperty("user.dir") + "\\JobCategory.xlsx"));
             Sheet sheet = workbook.getSheetAt(0);
             for (int i = 0; i < 8; i++) {
@@ -27,6 +27,7 @@ public class Excel implements InitializingBean {
                 Row row = sheet.getRow(i);
                 row.forEach(cell -> {
                     if (!cell.toString().equals("")) {
+                        job.setJob_id(index++);
                         job.setCategory(cell.toString());
                     }
                 });

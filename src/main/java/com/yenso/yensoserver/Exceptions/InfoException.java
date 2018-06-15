@@ -1,4 +1,4 @@
-package com.yenso.yensoserver.Service.Exceptions;
+package com.yenso.yensoserver.Exceptions;
 
 public class InfoException extends Exception {
     public InfoException(){

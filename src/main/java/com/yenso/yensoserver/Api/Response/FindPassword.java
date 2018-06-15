@@ -1,4 +1,4 @@
-package com.yenso.yensoserver.Service.Response;
+package com.yenso.yensoserver.Api.Response;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

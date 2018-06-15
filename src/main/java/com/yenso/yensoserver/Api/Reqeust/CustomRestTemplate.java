@@ -1,4 +1,4 @@
-package com.yenso.yensoserver.Service.Reqeust;
+package com.yenso.yensoserver.Api.Reqeust;
 
 import lombok.Setter;
 import org.springframework.boot.json.JsonParser;
@@ -10,7 +10,6 @@ import org.springframework.http.MediaType;
 import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.web.client.RestTemplate;
 
-import javax.swing.text.html.parser.Entity;
 import java.util.LinkedHashMap;
 import java.util.Map;
 import java.util.Map.*;
@@ -25,6 +24,7 @@ public class CustomRestTemplate extends RestTemplate {
     private Map requestData;
 
     public CustomRestTemplate() {
+
         restTemplate = new RestTemplate();
         requestData = new LinkedHashMap();
         headers = new HttpHeaders();
@@ -33,7 +33,9 @@ public class CustomRestTemplate extends RestTemplate {
 
     public void setHeaders(Map<String, String> headersData) {
         for (Entry<String, String> entry : headersData.entrySet()) {
-            headers.add(entry.getKey(), entry.getValue());
+            if(headers.get(entry.getKey()) == null){
+                headers.add(entry.getKey(), entry.getValue());
+            }
         }
     }
 
@@ -45,5 +47,4 @@ public class CustomRestTemplate extends RestTemplate {
         HttpEntity entity = new HttpEntity<>(this.requestData, this.headers);
         return jsonParser.parseMap(restTemplate.exchange(url, method, entity, String.class).getBody());
     }
-
 }

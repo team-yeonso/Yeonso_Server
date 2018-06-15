@@ -1,15 +1,11 @@
-package com.yenso.yensoserver.Service.Reqeust;
+package com.yenso.yensoserver.Api.Reqeust;
 
 import com.google.gson.Gson;
-import com.yenso.yensoserver.Domain.DTO.CelebrityDTO;
 import com.yenso.yensoserver.Domain.Model.Celebrity;
 import com.yenso.yensoserver.Domain.Model.Info;
 import com.yenso.yensoserver.Repository.CelebrityRepo;
-import com.yenso.yensoserver.Service.Exceptions.InfoException;
-import com.yenso.yensoserver.Service.Exceptions.UserCodeException;
-import com.yenso.yensoserver.Service.Exceptions.UserEmailException;
-import com.yenso.yensoserver.Service.Response.ResponseApi;
-import org.modelmapper.ModelMapper;
+import com.yenso.yensoserver.Exceptions.InfoException;
+import com.yenso.yensoserver.Api.Response.ResponseApi;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,10 +14,11 @@ import org.springframework.http.HttpMethod;
 import org.springframework.stereotype.Component;
 import org.springframework.util.LinkedMultiValueMap;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.yenso.yensoserver.Service.Reqeust.CustomRestTemplate.jsonParser;
+import static com.yenso.yensoserver.Api.Reqeust.CustomRestTemplate.jsonParser;
 
 @Component
 public class NaverApi implements InitializingBean {
@@ -59,9 +56,8 @@ public class NaverApi implements InitializingBean {
         Map imageMap = new LinkedMultiValueMap();
         ((LinkedMultiValueMap) imageMap).add("image", new FileSystemResource(path));
         restTemplate.setRequestData(imageMap);
-        Map<String, Object> data = (Map<String, Object>) jsonParser.parseMap(new Gson().toJson(
-                restTemplate.request(naverUrl, HttpMethod.POST))
-                .replace("[", "").replace("]", "")).get("faces");
+        ArrayList<Object> b = (ArrayList<Object>) restTemplate.request(naverUrl,HttpMethod.POST).get("faces");
+        Map<String, Object> data = jsonParser.parseMap(new Gson().toJson(b.get(0)));
         Map<String, Object> celebrityData = (Map<String, Object>) data.get("celebrity");
         Celebrity celebrity = celebrityRepo.findByInfoValue(id).orElseThrow(InfoException::new);
         String name = (String) celebrityData.get("value");

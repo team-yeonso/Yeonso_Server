@@ -3,7 +3,7 @@ package com.yenso.yensoserver.Repository;
 
 import com.yenso.yensoserver.Domain.DTO.UserDTO;
 import com.yenso.yensoserver.Domain.Model.User;
-import com.yenso.yensoserver.Service.Exceptions.UserEmailException;
+import com.yenso.yensoserver.Exceptions.UserEmailException;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;

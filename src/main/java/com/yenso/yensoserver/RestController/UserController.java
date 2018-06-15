@@ -2,14 +2,13 @@ package com.yenso.yensoserver.RestController;
 
 import com.yenso.yensoserver.Domain.DTO.*;
 import com.yenso.yensoserver.Domain.Model.Info;
-import com.yenso.yensoserver.Domain.Model.TempUser;
 import com.yenso.yensoserver.Domain.Model.User;
 import com.yenso.yensoserver.Repository.CelebrityRepo;
 import com.yenso.yensoserver.Repository.InfoRepo;
 import com.yenso.yensoserver.Repository.TempUserRepo;
 import com.yenso.yensoserver.Repository.UserRepo;
 import com.yenso.yensoserver.Service.*;
-import com.yenso.yensoserver.Service.Exceptions.UserEmailException;
+import com.yenso.yensoserver.Exceptions.UserEmailException;
 import com.yenso.yensoserver.Service.Mail.EmailServiceImpl;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;

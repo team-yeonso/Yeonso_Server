@@ -12,7 +12,7 @@ import java.io.Serializable;
 public class Job implements Serializable {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long job_id;
 
     @Column(unique = true)

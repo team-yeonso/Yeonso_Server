@@ -1,13 +1,12 @@
 package com.yenso.yensoserver.RestController;
 
-import com.yenso.yensoserver.Domain.DTO.InfoDTO;
 import com.yenso.yensoserver.Domain.Model.Info;
 import com.yenso.yensoserver.Repository.InfoRepo;
 import com.yenso.yensoserver.Repository.UserRepo;
-import com.yenso.yensoserver.Service.Exceptions.UserEmailException;
+import com.yenso.yensoserver.Exceptions.UserEmailException;
 import com.yenso.yensoserver.Service.Jwt;
-import com.yenso.yensoserver.Service.Reqeust.NaverApi;
-import com.yenso.yensoserver.Service.Response.ResponseApi;
+import com.yenso.yensoserver.Api.Reqeust.NaverApi;
+import com.yenso.yensoserver.Api.Response.ResponseApi;
 import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiParam;
 import net.bytebuddy.utility.RandomString;
@@ -52,7 +51,7 @@ public class TokenUserController {
     public ResponseEntity<ResponseApi> uploadFile(@ApiParam(name = "file", value = "file", required = true) @RequestPart MultipartFile file,
                                                   HttpServletRequest request, @RequestHeader(value = "Authorization") String token) throws Exception {
         File saveFile;
-        Info info = infoRepo.findByUserid(userRepo.findById(Long.valueOf((String) jwt.parser(Jwt.filterToken(token)))).orElseThrow(() -> new UserEmailException("Not found user"))).orElseThrow(() -> new UserEmailException("Not found user"));
+        Info info = infoRepo.findByUserid(userRepo.findById(jwt.parser(token)).orElseThrow(() -> new UserEmailException("Not found user"))).orElseThrow(() -> new UserEmailException("Not found user"));
         do {
             saveFile = new File(request.getSession().getServletContext().getRealPath("static") + "\\" + RandomString.make(32) + file.getOriginalFilename());
         } while (saveFile.exists());

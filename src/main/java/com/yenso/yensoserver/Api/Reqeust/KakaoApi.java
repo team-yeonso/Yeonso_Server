@@ -1,14 +1,11 @@
-package com.yenso.yensoserver.Service.Reqeust;
+package com.yenso.yensoserver.Api.Reqeust;
 
 import com.google.gson.Gson;
-import com.yenso.yensoserver.Domain.DTO.CelebrityDTO;
 import com.yenso.yensoserver.Domain.Model.Celebrity;
 import com.yenso.yensoserver.Domain.Model.Info;
 import com.yenso.yensoserver.Repository.CelebrityRepo;
-import com.yenso.yensoserver.Service.Exceptions.InfoException;
-import com.yenso.yensoserver.Service.Exceptions.UserEmailException;
-import com.yenso.yensoserver.Service.Response.ResponseApi;
-import org.modelmapper.ModelMapper;
+import com.yenso.yensoserver.Exceptions.InfoException;
+import com.yenso.yensoserver.Api.Response.ResponseApi;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -18,11 +15,10 @@ import org.springframework.stereotype.Component;
 import java.util.HashMap;
 import java.util.Map;
 
-import static com.yenso.yensoserver.Service.Reqeust.CustomRestTemplate.jsonParser;
+import static com.yenso.yensoserver.Api.Reqeust.CustomRestTemplate.jsonParser;
 
 @Component
-public class KakaoApi implements InitializingBean {
-
+public class KakaoApi implements InitializingBean{
     @Autowired
     private CelebrityRepo celebrityRepo;
     @Value("${kakaoSecret}")
@@ -50,7 +46,6 @@ public class KakaoApi implements InitializingBean {
         response.setCelebrity_path(celebrity.getImg_path());
         return response;
     }
-
 
     @Override
     public void afterPropertiesSet() throws Exception {
