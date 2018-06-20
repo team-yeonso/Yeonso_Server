@@ -14,19 +14,14 @@ public class TempUserDTO {
     private String email;
     private String password;
     private String code;
+    private String name;
 
     public TempUser toEntity(String enPassword, String code) {
         return TempUser.builder()
                 .email(email)
                 .password(enPassword)
                 .code(code)
-                .build();
-    }
-
-    public User converterUser(){
-        return User.builder()
-                .email(email)
-                .password(password)
+                .name(name)
                 .build();
     }
 

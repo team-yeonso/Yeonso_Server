@@ -61,7 +61,7 @@ public class UserController {
         String user_id = String.valueOf(userRepo.findByEmailAndPassword(data.getEmail(), crypto.encode(data.getPassword())).orElseThrow((Exception::new)).getUser_id());
         tokenDTO.setAccessToken(jwt.builder(user_id, "access", System.currentTimeMillis() + expAccessToken));
         tokenDTO.setRefreshToken(jwt.builder(user_id, "refresh", System.currentTimeMillis() + expRefreshToken));
-        return new ResponseEntity<>(tokenDTO, HttpStatus.OK);
+        return new ResponseEntity<> (tokenDTO, HttpStatus.OK);
     }
 
     @ApiOperation(value = "회원가입")

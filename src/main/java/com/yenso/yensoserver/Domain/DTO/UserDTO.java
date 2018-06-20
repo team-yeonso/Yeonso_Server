@@ -20,6 +20,8 @@ public class UserDTO {
 
     private String password;
 
+    private String name;
+
     private Date timestamp;
 
     public UserDTO SetUserData(User user){
@@ -27,6 +29,7 @@ public class UserDTO {
         this.password = user.getPassword();
         this.user_id = user.getUser_id();
         this.timestamp = user.getTimestamp();
+        this.name = user.getName();
         return this;
     }
 
@@ -34,13 +37,7 @@ public class UserDTO {
         return User.builder()
                 .email(this.email)
                 .password(this.password)
-                .build();
-    }
-
-    public User toEntity(User user){
-        return User.builder()
-                .email(user.getEmail())
-                .password(user.getPassword())
+                .name(this.name)
                 .build();
     }
 
@@ -48,6 +45,7 @@ public class UserDTO {
         return User.builder()
                 .email(userAuth.getEmail())
                 .password(userAuth.getPassword())
+                .name(userAuth.getName())
                 .build();
     }
 

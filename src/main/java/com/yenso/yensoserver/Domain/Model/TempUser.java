@@ -18,10 +18,14 @@ public class TempUser {
     @Column(unique = true)
     private String code;
 
+    @Column
+    private String name;
+
     @Builder
-    public TempUser(String email, String password, String code) {
+    public TempUser(String email, String password, String code, String name) {
         this.email = email;
         this.password = password;
         this.code = code;
+        this.name = name;
     }
 }

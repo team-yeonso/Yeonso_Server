@@ -20,13 +20,17 @@ public class User {
     @Column
     private String password;
 
+    @Column
+    private String name;
+
     @Column(columnDefinition="TIMESTAMP DEFAULT CURRENT_TIMESTAMP")
     @Temporal(TemporalType.DATE)
     private Date timestamp;
 
     @Builder
-    public User(String email, String password) {
+    public User(String email, String password,String name) {
         this.email = email;
         this.password = password;
+        this.name = name;
     }
 }

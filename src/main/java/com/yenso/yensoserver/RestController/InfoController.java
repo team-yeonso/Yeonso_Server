@@ -7,6 +7,7 @@ import com.yenso.yensoserver.Repository.InfoRepo;
 import com.yenso.yensoserver.Repository.JobRepo;
 import com.yenso.yensoserver.Repository.UserRepo;
 import com.yenso.yensoserver.Service.Jwt;
+import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.*;
@@ -32,6 +33,7 @@ public class InfoController {
     private Jwt Jwt;
 
     @RequestMapping(value = "/insert",method = RequestMethod.PATCH)
+    @ApiOperation(value = "사용자 정보 입력 API")
     public void insertData(@RequestBody InfoDTO infoData, @RequestHeader(value = "Authorization") String token) throws Exception {
          Info info = infoRepo.findByUserid(userRepo.findById(Jwt.parser(token)).orElseThrow(Exception::new)).orElseThrow(Exception::new);
          Job job = jobRepo.findById(infoData.getJob()).orElseThrow(Exception::new);
